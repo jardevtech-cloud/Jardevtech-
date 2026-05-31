@@ -1,0 +1,6 @@
+{
+  "name": "JardevTech Software Studio",
+  "description": "The official high-performance portfolio website of JardevTech: Website Development and Software Engineering Studio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
