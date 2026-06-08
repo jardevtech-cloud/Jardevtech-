@@ -25,4 +25,5 @@ export interface ProjectTemplate {
   description: string;
   features: string[];
   ctaText: string;
+  status?: "new" | "old";
 }

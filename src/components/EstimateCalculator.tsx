@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 export default function EstimateCalculator() {
   const [selectedTierIndex, setSelectedTierIndex] = useState(1); // Default Full Stack Web App
-  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([0, 2]); // Initial default feature indexes
+  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([0, 4]); // Initial default feature indexes
   const [selectedSupportIndex, setSelectedSupportIndex] = useState(0); // Default Standard Delivery
 
   const toggleFeature = (index: number) => {
@@ -25,19 +25,22 @@ export default function EstimateCalculator() {
       totalDays += ESTIMATE_DIMS.features[fIndex].days;
     });
 
-    // Support package multiplier
     const support = ESTIMATE_DIMS.support[selectedSupportIndex];
-    totalPrice = Math.floor(totalPrice * support.multiplier);
+    const isDollarMaintenance = !!support.isDollarSubscription;
+
+    if (!isDollarMaintenance) {
+      totalPrice += support.price;
+    }
     
     // Adjust days based on support sprint
     if (selectedSupportIndex === 1) { // Accelerated Sprint
       totalDays = Math.ceil(totalDays * 0.7);
     }
 
-    return { totalPrice, totalDays };
+    return { totalPrice, totalDays, isDollarMaintenance };
   };
 
-  const { totalPrice, totalDays } = calculateTotals();
+  const { totalPrice, totalDays, isDollarMaintenance } = calculateTotals();
 
   const [copiedSpec, setCopiedSpec] = useState(false);
   const handleCopySpec = () => {
@@ -45,7 +48,13 @@ export default function EstimateCalculator() {
     const addOnNames = selectedFeatures.map((fi) => ESTIMATE_DIMS.features[fi].name).join(", ");
     const priority = ESTIMATE_DIMS.support[selectedSupportIndex].name;
     
-    const textToCopy = `JardevTech Project Blueprint proposal:\n- Core Structure: ${tier.name}\n- Selected Addons: ${addOnNames || "None"}\n- Delivery Priority: ${priority}\n- Predicted Quote: $${totalPrice.toLocaleString()}\n- Target duration: ~${totalDays} Days\n\nGenerate consultation requirements for JardevTech.`;
+    const textToCopy = `JardevTech Project Blueprint:
+- Founder: Jarsila Paul (+256709290191 / +254752581912)
+- Architecture: ${tier.name}
+- Injected Integrations: ${addOnNames || "None"}
+- Launch Priority: ${priority}
+- Estimated Code Price: ${totalPrice.toLocaleString()} UGX${isDollarMaintenance ? " + $50 USD/month Maintenance" : ""}
+- Target Schedule: ~${totalDays} Days`;
     
     navigator.clipboard.writeText(textToCopy);
     setCopiedSpec(true);
@@ -93,7 +102,7 @@ export default function EstimateCalculator() {
                     <span className="text-xs font-bold text-slate-100 block">{t.name}</span>
                     <span className="text-[10px] text-slate-500 block mt-1.5">Starting at</span>
                     <span className="text-xs font-mono font-semibold text-orange-400 mt-0.5 inline-block">
-                      ${t.basePrice.toLocaleString()}
+                      {t.basePrice.toLocaleString()} UGX
                     </span>
                   </button>
                 );
@@ -127,7 +136,7 @@ export default function EstimateCalculator() {
                     </div>
                     <div className="text-right">
                       <span className={`text-[10px] font-mono font-bold block ${isSelected ? "text-blue-400" : "text-slate-500"}`}>
-                        +${f.cost}
+                        +{f.cost.toLocaleString()} UGX
                       </span>
                     </div>
                   </button>
@@ -175,15 +184,20 @@ export default function EstimateCalculator() {
 
             {/* Glowing price layout */}
             <div className="space-y-1 bg-slate-950 p-4 rounded-xl border border-slate-900/80 relative overflow-hidden">
-              <div className="absolute right-[-15px] bottom-[-15px] text-blue-500/5 rotate-12 select-none"><DollarSign size={80} /></div>
+              <div className="absolute right-[-15px] bottom-[-15px] text-blue-500/5 rotate-12 select-none"><Calendar size={80} /></div>
               
               <span className="text-slate-500 text-[10px] font-mono uppercase block">Recommended Budget Scope</span>
-              <div className="flex items-baseline gap-1 mt-1">
+              <div className="flex items-baseline gap-1.5 mt-1">
                 <span className="text-3xl font-extrabold text-white font-sans tracking-tight">
-                  ${totalPrice.toLocaleString()}
+                  {totalPrice.toLocaleString()}
                 </span>
-                <span className="text-slate-500 text-xs font-mono">USD</span>
+                <span className="text-orange-400 text-xs font-mono font-bold">UGX</span>
               </div>
+              {isDollarMaintenance && (
+                <div className="text-[10px] font-mono text-emerald-400 font-bold mt-2 pt-1 border-t border-slate-900 animate-pulse">
+                  + $50/mo Maintenance Subscription
+                </div>
+              )}
             </div>
 
             {/* Timelines projection blocks */}
@@ -210,6 +224,7 @@ export default function EstimateCalculator() {
 
           <div className="pt-6 border-t border-slate-900 mt-6 sm:mt-0">
             <button
+               id="copy-blueprint-btn"
               onClick={handleCopySpec}
               className="w-full bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white font-mono font-bold text-xs px-4 py-2.5 rounded-lg transition duration-200 uppercase tracking-widest flex items-center justify-center gap-2"
             >
@@ -220,7 +235,7 @@ export default function EstimateCalculator() {
                 </>
               ) : (
                 <>
-                  <Copy size={12} />
+                  <Check size={12} />
                   Copy Blueprint Data
                 </>
               )}

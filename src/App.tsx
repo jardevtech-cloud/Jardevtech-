@@ -1,14 +1,37 @@
-import React, { useState } from "react";
-import { Rocket, Terminal, Sparkles, Cpu, CheckCircle, Code, Globe, Github, Linkedin, Twitter, ExternalLink, ArrowRight, Layers, Smartphone, Binary, Zap } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Rocket, Terminal, Sparkles, Cpu, CheckCircle, Code, Globe, Github, Linkedin, Twitter, ExternalLink, ArrowRight, Layers, Smartphone, Binary, Zap, Phone, MessageSquare, ShieldAlert } from "lucide-react";
 import CodeSimulator from "./components/CodeSimulator";
 import CorePillars from "./components/CorePillars";
 import MockupShowcase from "./components/MockupShowcase";
 import AIConsultant from "./components/AIConsultant";
 import EstimateCalculator from "./components/EstimateCalculator";
+import AdminDashboard from "./components/AdminDashboard";
+import { PROJECTS_DATA } from "./data";
+import { ProjectTemplate } from "./types";
 import { motion } from "motion/react";
 
 export default function App() {
   const [successCount, setSuccessCount] = useState(0);
+  const [projectsList, setProjectsList] = useState<ProjectTemplate[]>([]);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("jardevtech_projects");
+    if (stored) {
+      try {
+        setProjectsList(JSON.parse(stored));
+      } catch (e) {
+        setProjectsList(PROJECTS_DATA);
+      }
+    } else {
+      setProjectsList(PROJECTS_DATA);
+    }
+  }, []);
+
+  const handleProjectsUpdated = (newList: ProjectTemplate[]) => {
+    setProjectsList(newList);
+    localStorage.setItem("jardevtech_projects", JSON.stringify(newList));
+  };
 
   const handleCompilerSuccess = () => {
     setSuccessCount((prev) => prev + 1);
@@ -54,12 +77,23 @@ export default function App() {
           <span className="hover:text-emerald-400 transition cursor-pointer">/ DELIVER</span>
         </div>
 
-        {/* Right Side: Active Status Tag */}
-        <div className="flex items-center gap-2 bg-slate-950/70 border border-slate-850 px-3 py-1.5 rounded-full select-none">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-          <span className="text-[9px] font-bold tracking-widest font-mono text-slate-400 uppercase">
-            STUDIO ACTIVE
-          </span>
+        {/* Right Side: Active Status Tag & Console entry */}
+        <div className="flex items-center gap-3">
+          <button
+            id="header-admin-btn"
+            onClick={() => setShowAdminDashboard(true)}
+            className="border border-slate-800 bg-slate-950/30 hover:bg-slate-900 text-slate-400 hover:text-white px-3 py-1.5 rounded-full text-[9px] font-mono transition uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+          >
+            <ShieldAlert size={11} className="text-orange-400 animate-pulse" />
+            Console
+          </button>
+          
+          <div className="flex items-center gap-2 bg-slate-950/70 border border-slate-850 px-3 py-1.5 rounded-full select-none">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span className="text-[9px] font-bold tracking-widest font-mono text-slate-400 uppercase">
+              STUDIO ACTIVE
+            </span>
+          </div>
         </div>
       </header>
 
@@ -231,15 +265,15 @@ export default function App() {
                 {/* Image shell */}
                 <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-slate-850 bg-slate-950 relative shadow-2xl">
                   <img
-                    src="/src/assets/images/founder_1780253243559.png"
-                    alt="Jardev - JarDevTech Founder & Lead Engineer"
+                    src="/src/assets/images/jarsila_paul_original_1780890467807.png"
+                    alt="Jarsila Paul - JardevTech Founder & Lead Software Engineer"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
                   />
                   {/* Subtle hover info overlay */}
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent p-4 flex flex-col justify-end">
                     <span className="text-[9px] font-mono tracking-widest text-[#2272ff] font-bold uppercase">STUDIO FOUNDER</span>
-                    <span className="text-sm font-bold text-white mt-0.5">Jardev</span>
+                    <span className="text-sm font-bold text-white mt-0.5">Jarsila Paul</span>
                   </div>
                 </div>
 
@@ -255,7 +289,7 @@ export default function App() {
             <div className="lg:col-span-8 space-y-4 text-left">
               <div>
                 <span className="text-[10px] uppercase font-mono tracking-widest text-orange-400 font-bold block mb-1">
-                  Meet the Founder
+                  Meet the Founder & Lead Engineer
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
                   Bridging Visual Artistry & High-Performance Engineering
@@ -266,12 +300,37 @@ export default function App() {
               </div>
 
               <p className="text-xs sm:text-[13px] text-slate-450 leading-relaxed font-sans font-medium">
-                Greetings, I'm <strong className="text-white font-bold font-mono">Jardev</strong>, the founder and lead software architect behind JardevTech. When I established this studio, my goal was clear: to rewrite the standard for modern client applications. We don't rely on bloated templates or cookie-cutter solutions. We design customized, ultra-performant digital systems designed from the ground up to rank high, load instantly, and look flawless across every device.
+                Greetings, I'm <strong className="text-white font-bold font-mono">Jarsila Paul</strong>, the founder and lead software architect behind JardevTech. When I established this studio, my goal was clear: to rewrite the standard for modern client applications. We don't rely on bloated templates or cookie-cutter solutions. We design customized, ultra-performant digital systems designed from the ground up to rank high, load instantly, and look flawless across every device.
               </p>
 
               <blockquote className="border-l-2 border-orange-500/80 pl-4 py-1 italic text-slate-300 text-xs sm:text-[13px] font-medium leading-relaxed bg-slate-950/40 p-3 rounded-r-lg">
                 "Our client platforms must have near-zero load latencies, absolute responsiveness, robust type-safe resilience, and flawless local-first SEO footprints. We code by hand to ensure your brand stands out."
               </blockquote>
+
+              {/* Founder Contact Actions Section */}
+              <div className="p-3 bg-slate-950/80 border border-slate-900 rounded-xl flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase select-none">
+                  Instant Collaborative Access
+                </span>
+                <div className="flex flex-wrap gap-2.5 w-full sm:w-auto">
+                  <a
+                    href="https://wa.me/254752581912?text=Hello%20Jarsila%20Paul%2C%20I%20saw%20your%20JardevTech%2520portfolio%2520and%2520would%2520love%2520to%2520consult%2520about%2520a%2520website%21"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 text-[10px] tracking-wider font-mono font-bold px-3.5 py-2' rounded-lg border border-emerald-500/20 transition duration-200"
+                  >
+                    <MessageSquare size={12} className="text-emerald-400 animate-pulse" />
+                    WhatsApp (+254752581912)
+                  </a>
+                  <a
+                    href="tel:+256709290191"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 text-[10px] tracking-wider font-mono font-bold px-3.5 py-2' rounded-lg border border-blue-500/20 transition duration-200"
+                  >
+                    <Phone size={12} className="text-blue-400" />
+                    Call Office (+256709290191)
+                  </a>
+                </div>
+              </div>
 
               {/* Core capabilities badge grids */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1.5">
@@ -293,15 +352,15 @@ export default function App() {
               <div className="flex items-center gap-3 pt-1">
                 <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-800 shrink-0 bg-slate-950">
                   <img
-                    src="/src/assets/images/founder_1780253243559.png"
+                    src="/src/assets/images/jarsila_paul_original_1780890467807.png"
                     alt="Signature avatar"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-white block font-mono">Jardev</span>
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono tracking-wider">Founder & Lead Dev @ JardevTech</span>
+                  <span className="text-[11px] font-bold text-white block font-mono">Jarsila Paul</span>
+                  <span className="text-[9px] text-slate-500 block uppercase font-mono tracking-wider">Founder & Lead Software Engineer @ JardevTech</span>
                 </div>
               </div>
             </div>
@@ -311,7 +370,7 @@ export default function App() {
 
       {/* Projects 3D Deck Slide Mockups */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-        <MockupShowcase />
+        <MockupShowcase projects={projectsList} />
       </section>
 
       {/* AI Consulting Architect & Dynamic Budget Estimator Row */}
@@ -390,15 +449,56 @@ export default function App() {
         </div>
       </section>
 
+      {/* Floating Cyber Contact Dock */}
+      <div className="fixed bottom-6 right-6 z-40 bg-[#060a13]/90 border border-slate-850 rounded-2xl p-2.5 backdrop-blur-md shadow-2xl flex flex-col gap-1.5 shrink-0 max-w-xs select-none">
+        <span className="text-[7px] font-mono font-bold text-orange-400 tracking-widest uppercase block text-center border-b border-slate-900 pb-1">
+          Direct Contact Pill
+        </span>
+        <a
+          href="https://wa.me/254752581912?text=Hello%20Jarsila%20Paul%2C%20I'm%20interested%20in%20a%20website%20consultation%21"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 bg-emerald-600/15 hover:bg-emerald-600/25 text-emerald-400 text-[8.5px] font-mono font-bold px-2.5 py-1.5 rounded-lg border border-emerald-500/10 transition duration-200 uppercase tracking-wider"
+        >
+          <MessageSquare size={11} className="text-emerald-400 animate-pulse" />
+          WhatsApp Jarsila
+        </a>
+        <a
+          href="tel:+256709290191"
+          className="flex items-center gap-1.5 bg-blue-600/15 hover:bg-blue-600/25 text-blue-400 text-[8.5px] font-mono font-bold px-2.5 py-1.5 rounded-lg border border-blue-500/10 transition duration-200 uppercase tracking-wider"
+        >
+          <Phone size={11} className="text-blue-400" />
+          Call +256709290191
+        </a>
+      </div>
+
       {/* Human humble footer indicator */}
       <footer className="text-center pt-8 border-t border-slate-950/60 max-w-7xl mx-auto px-4 z-10 relative">
+        <div className="flex justify-center mb-4">
+          <button
+            id="admin-dashboard-btn"
+            onClick={() => setShowAdminDashboard(true)}
+            className="flex items-center gap-1.5 border border-slate-900 bg-slate-950/40 hover:bg-slate-900/80 text-slate-500 hover:text-white px-3.5 py-1.5 rounded-lg text-[9px] font-mono transition uppercase tracking-widest border-dashed cursor-pointer"
+          >
+            <ShieldAlert size={12} className="text-orange-400 animate-pulse" />
+            Secure Admin Vault
+          </button>
+        </div>
         <span className="text-[10px] text-slate-600 font-mono uppercase tracking-widest block">
           Designed & Configured strictly for JardevTech Software Engineering Studio
         </span>
-        <span className="text-[9px] text-slate-700 block mt-1 font-mono">
+        <span className="text-[9px] text-[#2c3e5e] block mt-1 font-mono">
           © {new Date().getFullYear()} JardevTech. We Build. You Grow. All rights reserved.
         </span>
       </footer>
+
+      {showAdminDashboard && (
+        <AdminDashboard
+          onClose={() => setShowAdminDashboard(false)}
+          currentProjects={projectsList}
+          onProjectsUpdated={handleProjectsUpdated}
+        />
+      )}
 
     </div>
   );

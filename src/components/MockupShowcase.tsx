@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MoveRight, PlusCircle, Trash2, CheckCircle, HelpCircle, HardDrive, RefreshCw, Send, Sparkles, Orbit } from "lucide-react";
 import { PROJECTS_DATA } from "../data";
+import { ProjectTemplate } from "../types";
 import { motion, AnimatePresence } from "motion/react";
+
+interface MockupShowcaseProps {
+  projects?: ProjectTemplate[];
+}
 
 interface Cube {
   id: string;
@@ -11,8 +16,15 @@ interface Cube {
   y: number; // For staggered heights
 }
 
-export default function MockupShowcase() {
+export default function MockupShowcase({ projects }: MockupShowcaseProps) {
+  const items = projects || PROJECTS_DATA;
   const [selectedCardId, setSelectedCardId] = useState<string>("isometric");
+
+  useEffect(() => {
+    if (items.length > 0 && !items.some((p) => p.id === selectedCardId)) {
+      setSelectedCardId(items[0].id);
+    }
+  }, [items, selectedCardId]);
 
   // State for isometric block developer (Card 3)
   const [cubes, setCubes] = useState<Cube[]>([
@@ -86,7 +98,7 @@ export default function MockupShowcase() {
         {/* The 3D Staggered Cards Deck Layout */}
         <div className="relative py-8 overflow-x-auto select-none no-scrollbar flex justify-center gap-4 px-4">
           <div className="flex gap-4 min-w-[900px] md:min-w-fit justify-center items-center py-4">
-            {PROJECTS_DATA.map((proj, idx) => {
+            {items.map((proj, idx) => {
               const isSelected = selectedCardId === proj.id;
               
               // Custom rotate angles representing the beautiful picture design
@@ -158,15 +170,15 @@ export default function MockupShowcase() {
                 Active Interactive Simulator
               </span>
               <h4 className="text-lg font-bold text-white tracking-tight mt-1">
-                {PROJECTS_DATA.find((p) => p.id === selectedCardId)?.title}
+                {items.find((p) => p.id === selectedCardId)?.title}
               </h4>
               <p className="text-xs text-slate-400">
-                {PROJECTS_DATA.find((p) => p.id === selectedCardId)?.subtitle}
+                {items.find((p) => p.id === selectedCardId)?.subtitle}
               </p>
             </div>
             
             <span className="text-xs text-slate-500 uppercase font-mono bg-slate-900 border border-slate-800 px-3 py-1 rounded-full w-fit">
-              ID: jardev_mod_{selectedCardId}
+              ID: jarsila_mod_{selectedCardId}
             </span>
           </div>
 
@@ -175,26 +187,28 @@ export default function MockupShowcase() {
             <div className="lg:col-span-4 space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  {PROJECTS_DATA.find((p) => p.id === selectedCardId)?.description}
+                  {items.find((p) => p.id === selectedCardId)?.description}
                 </p>
                 
                 <h5 className="text-[10px] font-bold text-slate-500 uppercase font-mono tracking-wider">
                   Target Deliverables Included:
                 </h5>
                 <ul className="space-y-1.5">
-                  {PROJECTS_DATA.find((p) => p.id === selectedCardId)?.features.map((feat, fIdx) => (
-                    <li key={fIdx} className="text-xs text-slate-300 flex items-center gap-2">
-                      <CheckCircle size={11} className="text-orange-400 shrink-0" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
+                  {items.find((p) => p.id === selectedCardId)?.features ? (
+                    items.find((p) => p.id === selectedCardId)?.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="text-xs text-slate-300 flex items-center gap-2">
+                        <CheckCircle size={11} className="text-orange-400 shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))
+                  ) : null}
                 </ul>
               </div>
 
               <div className="pt-4 border-t border-slate-900">
                 <span className="text-[10px] text-slate-500 block mb-1">Empowering full ownership</span>
                 <button className="w-full bg-gradient-to-r from-blue-600 to-orange-600 text-white font-mono font-bold text-xs px-4 py-2 rounded-lg hover:from-blue-500 hover:to-orange-500 transition duration-300 uppercase tracking-widest">
-                  {PROJECTS_DATA.find((p) => p.id === selectedCardId)?.ctaText}
+                  {items.find((p) => p.id === selectedCardId)?.ctaText || "Explore"}
                 </button>
               </div>
             </div>

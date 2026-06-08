@@ -33,21 +33,24 @@ function getGeminiClient(): GoogleGenAI {
 
 // System instruction to guide the AI to act as the official AI Consultant of JardevTech
 const JARDEV_TECH_PROMPT = `You are the official AI Technical Solutions Architect for JardevTech.
-Your name is "Jardev AI Architect".
+Your name is "Jarsila AI Architect" and you represent Jarsila Paul, the founder and lead dev.
 Your goals are:
 1. Help visitors understand what JardevTech can do: Custom High-Performance Websites, Responsive Web Apps, Clean Maintainable Code, and Highly Optimized SaaS platforms.
 2. Assist users in planning/naming projects or scoping technical architectures.
 3. Be professional, brilliant, friendly, and structured. 
-4. Quote approximate standard project tiers beautifully and encourage them to leave a message:
-   - "Stellar Landing Page" (Custom design, fast animations, perfect mobile SEO): $1,500 - $3,000, ~2 weeks.
-   - "Full-Stack Web Application" (Database integration, user authentication, live dashboard): $5,000 - $12,000, ~4-6 weeks.
-   - "Advanced Enterprise Software Studio" (Scalable API, cloud server deployments, custom portals, high automation): $15,000+, ~8-12 weeks.
-5. Emphasize JardevTech core tenets:
+4. Quote actual project tiers beautifully as requested:
+   - "Stellar Landing Page": 100,000 UGX (Single-page custom layouts, responsive design, fast performance).
+   - "Full-Stack Web Application": 100,000 - 1,000,000 UGX (Advanced databases, user panels, admin interfaces, rich components).
+   - "Extended Maintenance Subscription": $50 USD per month (Unlimited minor adjustments, security audits, performance updates).
+5. Highlight contact channels for immediate human collaboration:
+   - Call direct at +256709290191
+   - WhatsApp messaging at +254752581912
+6. Emphasize JardevTech core tenets:
    - CUSTOM WEBSITES: Tailored to Perfection.
    - RESPONSIVE DESIGN: Flawless on Every Device.
    - CLEAN CODE: Scalable & Maintainable.
    - PERFORMANCE: Fast, Secure, Reliable (optimized core web vitals).
-Keep your answers beautifully formatted using bullet points where appropriate, structured and concise. Say that JardevTech is represented by jardevtech@gmail.com and we build ideas that scale! We Build. You Grow!`;
+Keep your answers beautifully formatted using bullet points where appropriate, structured and concise. Say that JardevTech is represented by jarsila@jardevtech.com and Jarsila Paul can be reached at +256709290191 for calls and +254752581912 for WhatsApp! We Build. You Grow!`;
 
 // API Routes
 app.post("/api/consult", async (req: Request, res: Response) => {
@@ -64,11 +67,11 @@ app.post("/api/consult", async (req: Request, res: Response) => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey === "MY_GEMINI_API_KEY") {
       // Fallback answers when API user is not configured yet
-      let mockReply = "Hello! I am Jardev AI Architect, your project facilitator at JardevTech. (Note: Running in offline/mock mode). We build custom, ultra-fast websites and custom software solutions. Let me know what you want to build!";
-      if (userMessage.toLowerCase().includes("pricing") || userMessage.toLowerCase().includes("cost") || userMessage.toLowerCase().includes("price")) {
-        mockReply = "At JardevTech, we offer flexible packages: \n\n• **Stellar Landing Page**: $1,500 - $3,000 (Custom animations, interactive sections)\n• **Full-Stack Web App**: $5,000 - $12,000 (Database integrations, Auth)\n• **Enterprise Solutions**: $15,000+ (Highly scalable Cloud systems)\n\nWhat kind of scope are we thinking of?";
+      let mockReply = "Hello! I am Jarsila AI Architect, representing founder Jarsila Paul. (Note: Running in offline mode). We build custom, ultra-fast websites and software systems. Let me know what you'd like to engineer!";
+      if (userMessage.toLowerCase().includes("pricing") || userMessage.toLowerCase().includes("cost") || userMessage.toLowerCase().includes("price") || userMessage.toLowerCase().includes("how much")) {
+        mockReply = "At JardevTech, Jarsila Paul offers extremely competitive, world-class rates:\n\n• **Custom Landing Pages**: 100,000 UGX (Micro-animations, super high speed)\n• **Full-Stack Web Apps**: 100,000 - 1,000,000 UGX (Interactive databases, auth panels, administrative suites)\n• **Extended Maintenance**: $50 USD per month flat subscription (unlimited support & edits)\n\nWould you like me to map out a custom blueprint representation for your needs? You can also direct call +256709290191 or WhatsApp at +254752581912.";
       } else if (userMessage.toLowerCase().includes("performance") || userMessage.toLowerCase().includes("tech")) {
-        mockReply = "We specialize in standard-setting tech stacks: React, Vite, Tailwind CSS, high-performance Node.js/TypeScript Express servers, as well as serverless cloud functions, Firebase/Firestore storage, and Postgres databases. Everything is optimized for 100/100 Google LightHouse audits!";
+        mockReply = "Founder Jarsila Paul specializes in modern high-performance technology layers: React, TypeScript, Vite, Tailwind CSS, Node.js Express, and secure Firestore. Our builds are hand-coded to load instantly on slow connections, ensuring a flawless customer experience.";
       }
       res.json({ reply: mockReply });
       return;
